@@ -1,0 +1,37 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/147.0.0.0 Safari/537.36 Edg/147.0.0.0">
+  <diagram name="Page-1" id="fqAMfZQCKEJ7nWPoIRWX">
+    <mxGraphModel dx="1022" dy="564" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="uww3oYmae9dUxVyMjgbf-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&#xa;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Times New Roman&amp;quot;, serif; font-size: 18.6667px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre-wrap; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;AUTHORS&lt;/span&gt;&#xa;&#xa;" vertex="1">
+          <mxGeometry height="60" width="120" x="510" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="uww3oYmae9dUxVyMjgbf-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="&#xa;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Times New Roman&amp;quot;, serif; font-size: 18.6667px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre-wrap; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;BOOKS&lt;/span&gt;&#xa;&#xa;" vertex="1">
+          <mxGeometry height="60" width="120" x="160" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="uww3oYmae9dUxVyMjgbf-4" parent="1" style="rhombus;whiteSpace=wrap;html=1;" value="Viết" vertex="1">
+          <mxGeometry height="80" width="80" x="360" y="260" as="geometry" />
+        </mxCell>
+        <mxCell id="uww3oYmae9dUxVyMjgbf-5" edge="1" parent="1" source="uww3oYmae9dUxVyMjgbf-4" style="endArrow=none;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" target="uww3oYmae9dUxVyMjgbf-3" value="N">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="350" y="300" as="sourcePoint" />
+            <mxPoint x="450" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="uww3oYmae9dUxVyMjgbf-7" edge="1" parent="1" source="uww3oYmae9dUxVyMjgbf-4" style="endArrow=none;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="uww3oYmae9dUxVyMjgbf-2" value="1">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="400" y="420" as="sourcePoint" />
+            <mxPoint x="450" y="370" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="uww3oYmae9dUxVyMjgbf-8" parent="1" style="rounded=0;whiteSpace=wrap;html=1;align=left;" value="&lt;p data-start=&quot;134&quot; data-end=&quot;399&quot;&gt;Để AUTHORS là thuộc tính khiến thông tin tác giả bị lặp lại nhiều lần ở mỗi cuốn sách - Khi cập nhật thông tin tác giả, phải sửa ở nhiều chỗ → dễ sai sót - Tốn dung lượng lưu trữ vì lưu cùng dữ liệu nhiều lần - Khó mở rộng hệ thống khi số sách và tác giả tăng lên&lt;/p&gt;&lt;p data-start=&quot;401&quot; data-end=&quot;528&quot; data-is-last-node=&quot;&quot; data-is-only-node=&quot;&quot;&gt;AUTHORS phải là Thực thể riêng - không phải thuộc tính - để tránh dư thừa dữ liệu và dễ quản lý lâu dài&lt;/p&gt;" vertex="1">
+          <mxGeometry height="120" width="700" x="20" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="uww3oYmae9dUxVyMjgbf-9" edge="1" parent="1" source="uww3oYmae9dUxVyMjgbf-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" target="uww3oYmae9dUxVyMjgbf-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
