@@ -1,0 +1,10 @@
+USE dtb_ss02;
+
+CREATE TABLE WALLETS (
+    WalletID INT PRIMARY KEY AUTO_INCREMENT,
+    CustomerID INT NOT NULL,
+    Balance DECIMAL(12,2) NOT NULL DEFAULT 0,
+    CONSTRAINT uq_customer_wallet UNIQUE (CustomerID),
+    CONSTRAINT chk_balance CHECK (Balance >= 0),
+    CONSTRAINT FOREIGN KEY (CustomerID) REFERENCES CUSTOMERS(CustomerID)
+);

@@ -1,0 +1,8 @@
+USE dtb_ss02;
+
+CREATE TABLE users (
+	phone INT NOT NULL
+);
+
+ALTER TABLE users
+MODIFY COLUMN phone VARCHAR(15);
