@@ -1,4 +1,3 @@
-
 CREATE DATABASE IF NOT EXISTS ss3_bt01;
 USE ss3_bt01;
 
