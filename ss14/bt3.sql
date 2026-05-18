@@ -22,8 +22,8 @@
 
 -- CODE thì e sẽ viết như sau
 
-CREATE DATABASE PharmacyDB;
-USE PharmacyDB;
+CREATE DATABASE IF NOT EXISTS bt3;
+USE bt3;
 
 CREATE TABLE Medicines(
     medicine_id INT PRIMARY KEY,
@@ -75,13 +75,11 @@ BEGIN
         INTO v_stock, v_price
         FROM Medicines
         WHERE medicine_id = p_medicine_id;
-
+        
         IF v_stock < p_quantity THEN
             ROLLBACK;
             SET p_message = 'Loi: So luong ton kho khong du';
-
         ELSE
-
             UPDATE Medicines SET stock = stock - p_quantity   WHERE medicine_id = p_medicine_id;
             UPDATE Patient_Invoices   SET total_due = total_due + (p_quantity * v_price) WHERE patient_id = p_patient_id;
          COMMIT;
@@ -100,7 +98,7 @@ SELECT @msg;
 SELECT * FROM Medicines;
 
 SELECT * FROM Patient_Invoices;
--- ví dụ thuốc đã bị trừ trong kho nhưng công nợ chưa được cập nhật
+--  thuốc đã bị trừ trong kho nhưng công nợ chưa được cập nhật
 -- thì dữ liệu sẽ không đồng nhất.
 
 
