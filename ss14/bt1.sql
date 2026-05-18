@@ -194,10 +194,6 @@ DROP PROCEDURE IF EXISTS PayHospitalFee;
 DELIMITER //
 CREATE PROCEDURE PayHospitalFee( IN p_patient_id INT,   IN p_amount DECIMAL(18,2))
 BEGIN
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-    END;
     START TRANSACTION;
     UPDATE Wallets
     SET balance = balance - p_amount
