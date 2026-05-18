@@ -58,10 +58,6 @@ CREATE PROCEDURE CapPhatThuoc(
 BEGIN
 	DECLARE v_stock INT;
     DECLARE v_price DECIMAL(10,2);
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-    END;
     START TRANSACTION;
     SELECT stock, price
     INTO v_stock, v_price
@@ -98,8 +94,8 @@ SELECT @msg;
 SELECT * FROM Medicines;
 
 SELECT * FROM Patient_Invoices;
-
--- thì thuốc sẽ bị trừ kho,công nợ tăng lên,và hệ thống trả thông báo thành công.
+-- ví dụ thuốc đã bị trừ trong kho nhưng công nợ chưa được cập nhật
+-- thì dữ liệu sẽ không đồng nhất.
 
 
 -- Trường hợp nhập quá số lượng tồn kho sẽ báo lỗi
