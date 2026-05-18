@@ -1,4 +1,4 @@
-CREATE DATABASE RikkeiClinicDB;
+CREATE DATABASE IF NOT EXISTS  RikkeiClinicDB;
 USE RikkeiClinicDB;
 
 -- PHẦN 1: KHỞI TẠO CẤU TRÚC BẢNG 
@@ -167,45 +167,42 @@ INSERT INTO Wallets (patient_id, balance, status) VALUES
 (2, 50000.00, 'Active'),     -- Test Case 3: Cháy ví (Chỉ có 50k, không đủ khám 200k)
 (3, 1000000.00, 'Inactive'); -- Test Case 2: Nhiều tiền nhưng thẻ bị khóa
 
-
 DROP PROCEDURE IF EXISTS PayHospitalFee;
 DELIMITER //
-CREATE PROCEDURE PayHospitalFee(IN p_patient_id INT,  IN p_amount DECIMAL(18,2))
+CREATE PROCEDURE PayHospitalFee(IN p_patient_id INT,IN p_amount DECIMAL(18,2))
+ 
 BEGIN
-	UPDATE RikkeiClinicDB.Wallets
-    SET balance = balance - p_amount
-    WHERE patient_id = p_patient_id;
-    SIGNAL SQLSTATE '45000'
-    SET MESSAGE_TEXT =' hệ thống gặp sự cố';
-    UPDATE RikkeiClinicDB.Patient_Invoices
-    SET total_due = total_due - p_amount
-    WHERE patient_id = p_patient_id;
-END //
-DELIMITER ;
+    DECLARE v_balance DECIMAL(18,2);
+    START TRANSACTION;
+		SELECT balance
+		INTO v_balance
+		FROM Wallets
+		WHERE patient_id = p_patient_id;
 
-CALL PayHospitalFee(1, 500000);
+    IF v_balance IS NULL OR p_amount <= 0 OR v_balance < p_amount THEN
+        ROLLBACK;
+    ELSE
+        UPDATE Wallets SET balance = balance - p_amount  WHERE patient_id = p_patient_id;
+        UPDATE Patient_Invoices SET total_due = total_due - p_amount  WHERE patient_id = p_patient_id;
+	COMMIT;
+    END IF;
+END //
+
+DELIMITER ;
+-- Trường hợp thành công
+CALL PayHospitalFee(1, 200000);
+
+SELECT * FROM Wallets;
+SELECT * FROM Patient_Invoices;
 -- theo em trường hợp này đang vi phạm thuộc tính Atomicity vì một  transaction yêu cầu phải 
 -- đảm bảo hoặc tất cả các thao tác đều thực hiện thành công, nếu có lỗi thì phải hủy hết nhưng ở đây chỉ có thao 
 -- tác trừ tiền được thực thi còn thao tác công nợ thì chưa chạy nên dẫn đến là dữ liệu nó không đồng nhất
-SELECT * FROM RikkeiClinicDB.Wallets;
-SELECT * FROM RikkeiClinicDB.Patient_Invoices;
 
-DROP PROCEDURE IF EXISTS PayHospitalFee;
-DELIMITER //
-CREATE PROCEDURE PayHospitalFee( IN p_patient_id INT,   IN p_amount DECIMAL(18,2))
-BEGIN
-    START TRANSACTION;
-    UPDATE Wallets
-    SET balance = balance - p_amount
-    WHERE patient_id = p_patient_id;
-    UPDATE Patient_Invoices
-    SET total_due = total_due - p_amount
-    WHERE patient_id = p_patient_id;
-    COMMIT;
-END //
-DELIMITER ;
+-- Trường hợp lỗi số dư không đủ
+CALL PayHospitalFee(2, 1000000);
 
-CALL PayHospitalFee(1,500000);
+-- Trường hợp dữ liệu không hợp lệ
+CALL PayHospitalFee(1, -50000);
 
 
 
