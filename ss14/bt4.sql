@@ -94,61 +94,43 @@ CREATE PROCEDURE PayHospitalFee(
     IN p_amount DECIMAL(10,2),
     OUT p_message VARCHAR(100)
 )
-
 BEGIN
+
     DECLARE v_balance DECIMAL(10,2);
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        SET p_message = 'Co loi xay ra';
-    END;
 
     START TRANSACTION;
 
-    -- kiểm tra số tiền âm
-    IF p_amount <= 0 THEN
+    -- 1. kiểm tra số tiền hợp lệ
+   IF p_amount <= 0 THEN
+    ROLLBACK;
+    SET p_message = 'Loi: So tien khong hop le';
 
+ELSEIF NOT EXISTS (
+    SELECT 1 FROM Wallets WHERE patient_id = p_patient_id
+) THEN
+    ROLLBACK;
+    SET p_message = 'Loi: Khong tim thay vi';
+
+ELSE
+
+    -- lấy số dư ví 
+    SELECT balance
+    INTO v_balance
+    FROM Wallets
+    WHERE patient_id = p_patient_id;
+
+    IF v_balance < p_amount THEN
         ROLLBACK;
-
-        SET p_message = 'Loi: So tien khong hop le';
+        SET p_message = 'Loi: So du khong du';
 
     ELSE
-
-        -- lấy số dư ví
-        SELECT balance
-        INTO v_balance
-        FROM Wallets
-        WHERE patient_id = p_patient_id;
-
-        -- kiểm tra ví có đủ tiền không
-        IF v_balance < p_amount THEN
-
-            ROLLBACK;
-
-            SET p_message = 'Loi: So du khong du';
-
-        ELSE
-
-            -- trừ tiền trong ví
-            UPDATE Wallets
-            SET balance = balance - p_amount
-            WHERE patient_id = p_patient_id;
-
-            -- giảm công nợ
-            UPDATE Patient_Invoices
-            SET total_due = total_due - p_amount
-            WHERE patient_id = p_patient_id;
-
-            COMMIT;
-
-            SET p_message = 'Thanh toan thanh cong';
-
-        END IF;
-
+        UPDATE Wallets  SET balance = balance - p_amount  WHERE patient_id = p_patient_id;
+        UPDATE Patient_Invoices  SET total_due = total_due - p_amount  WHERE patient_id = p_patient_id;
+        COMMIT;
+        SET p_message = 'Thanh toan thanh cong';
     END IF;
-
+END IF;
 END //
-
 DELIMITER ;
 
 -- tiến hành kiểm thử
