@@ -56,31 +56,37 @@ CREATE PROCEDURE CapPhatThuoc(
     OUT p_message VARCHAR(100)
 )
 BEGIN
-	DECLARE v_stock INT;
+    DECLARE v_stock INT;
     DECLARE v_price DECIMAL(10,2);
+
     START TRANSACTION;
-    SELECT stock, price
-    INTO v_stock, v_price
-    FROM Medicines
-    WHERE medicine_id = p_medicine_id;
-
-    -- đây sẽ là logic để kiểm tra tồn kho
-    IF p_quantity > v_stock THEN
+    IF p_quantity <= 0 THEN
         ROLLBACK;
-        SET p_message = 'Loi: So luong ton kho khong du';
-    ELSE
+        SET p_message = 'Loi: So luong khong hop le';
 
-        -- đây là bước để xử lý trừ thuốc trong kho
-        UPDATE Medicines
-        SET stock = stock - p_quantity
+    ELSEIF NOT EXISTS (
+        SELECT 1 FROM Medicines WHERE medicine_id = p_medicine_id
+    ) THEN
+        ROLLBACK;
+        SET p_message = 'Loi: Khong tim thay thuoc';
+
+    ELSE
+        SELECT stock, price
+        INTO v_stock, v_price
+        FROM Medicines
         WHERE medicine_id = p_medicine_id;
 
-        -- cộng tiền vào công nợ
-        UPDATE Patient_Invoices
-        SET total_due = total_due + (p_quantity * v_price)
-        WHERE patient_id = p_patient_id;
-        COMMIT;
-        SET p_message = 'Da cap phat thanh cong';
+        IF v_stock < p_quantity THEN
+            ROLLBACK;
+            SET p_message = 'Loi: So luong ton kho khong du';
+
+        ELSE
+
+            UPDATE Medicines SET stock = stock - p_quantity   WHERE medicine_id = p_medicine_id;
+            UPDATE Patient_Invoices   SET total_due = total_due + (p_quantity * v_price) WHERE patient_id = p_patient_id;
+         COMMIT;
+            SET p_message = 'Da cap phat thanh cong';
+        END IF;
     END IF;
 END //
 DELIMITER ;
