@@ -86,9 +86,7 @@ VALUES
 (2,200000);
 
 DROP PROCEDURE IF EXISTS PayHospitalFee;
-
 DELIMITER //
-
 CREATE PROCEDURE PayHospitalFee(
     IN p_patient_id INT,
     IN p_amount DECIMAL(10,2),
